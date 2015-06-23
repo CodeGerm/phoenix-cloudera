@@ -984,8 +984,14 @@ public class PhoenixStatement implements Statement, SQLCloseable, org.apache.pho
         return Collections.<Object>emptyList();
     }
     
+    //Intercept to modify sql queries
+    //TODO:change it back
     protected CompilableStatement parseStatement(String sql) throws SQLException {
-        PhoenixStatementParser parser = null;
+    	logger.warn("original query: "+sql);
+    	if(sql.toLowerCase().contains("select"))
+        	sql = sql.replace("\"", "");
+    	logger.warn("pruned query: "+sql);
+    	PhoenixStatementParser parser = null;
         try {
             parser = new PhoenixStatementParser(sql, new ExecutableNodeFactory());
         } catch (IOException e) {
